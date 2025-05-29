@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Universal Flashcard Trainer</title>
+  <style>
+    :root {
+      --bg-color: #f0f0f0;
+      --card-bg: #ffffff;
+      --text-color: #333333;
+      --font-family: sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: var(--bg-color);
+      font-family: var(--font-family);
+      color: var(--text-color);
+    }
+    .card {
+      background: var(--card-bg);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .term {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .definition {
+      font-size: 1.25rem;
+      margin-top: 1rem;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    .buttons {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      background: #007acc;
+      color: white;
+    }
+    button:hover {
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div id="question" class="term">Loading...</div>
+    <img id="card-image" src="" alt="" style="display:none;" />
+    <div id="answer" class="definition" style="display:none;"></div>
+    <div class="buttons">
+      <button id="show-answer">Show Answer</button>
+      <button id="next">Next</button>
+    </div>
+  </div>
+
+  <script>
+    /**
+     * DATA: Replace this array with your own items.
+     * Each item can have: term (string), definition (string), image (optional URL)
+     */
+    const items = [
+      { term: 'ᚠ', definition: 'Fehu – wealth', image: '' },
+      { term: 'ᚢ', definition: 'Uruz – strength', image: '' },
+      { term: 'ᚦ', definition: 'Thurisaz – thorn', image: '' },
+      // ... add more entries here
+    ];
+
+    let currentIndex = null;
+    const questionEl = document.getElementById('question');
+    const answerEl = document.getElementById('answer');
+    const imageEl = document.getElementById('card-image');
+    const showBtn = document.getElementById('show-answer');
+    const nextBtn = document.getElementById('next');
+
+    function getRandomIndex() {
+      return Math.floor(Math.random() * items.length);
+    }
+
+    function showCard() {
+      currentIndex = getRandomIndex();
+      const item = items[currentIndex];
+      questionEl.textContent = item.term;
+      answerEl.textContent = item.definition;
+      answerEl.style.display = 'none';
+      if (item.image) {
+        imageEl.src = item.image;
+        imageEl.style.display = 'block';
+      } else {
+        imageEl.style.display = 'none';
+      }
+    }
+
+    showBtn.addEventListener('click', () => {
+      answerEl.style.display = 'block';
+    });
+
+    nextBtn.addEventListener('click', () => {
+      showCard();
+    });
+
+    // Initialize
+    window.addEventListener('load', () => {
+      if (!items.length) {
+        questionEl.textContent = 'No items found. Please add data.';
+        showBtn.disabled = true;
+        nextBtn.disabled = true;
+      } else {
+        showCard();
+      }
+    });
+  </script>
+</body>
+</html>
